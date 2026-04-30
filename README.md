@@ -51,7 +51,7 @@ cd debate-arena
 ### 2. Install dependencies
 
 ```bash
-pip install langgraph langchain-groq rich
+pip install -r requirements.txt
 ```
 
 ### 3. Set your Groq API key
