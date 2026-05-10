@@ -91,12 +91,6 @@ python main.py
 
 ---
 
-## 📄 License
-
-MIT License.
-
----
-
 ## 🙌 Author
 
 Built by **Sripadh Sujith**
