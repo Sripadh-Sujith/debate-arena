@@ -1,14 +1,14 @@
 import random
-from langchain_groq import ChatGroq
+from langchain_openrouter import ChatOpenRouter
 from typing_extensions import TypedDict, List, Dict
 from prompts import PRO_PROMPT, CON_PROMPT, MODERATOR_PROMPT, JUDGE_PROMPT
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-llm = ChatGroq(
-    model='llama-3.1-8b-instant',
-    api_key=os.getenv('GROQ_API_KEY')
+llm = ChatOpenRouter(
+    model="google/gemma-4-26b-a4b-it",
+    api_key=os.getenv('API_KEY')
 )
 
 class State(TypedDict):
