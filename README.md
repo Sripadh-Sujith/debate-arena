@@ -1,75 +1,85 @@
 # 🎙️ AI Debate Arena
 
-An AI-powered multi-agent debate simulator built with **LangGraph** and **Groq**. Two AI agents argue opposing sides of any topic across multiple rounds, moderated and judged by dedicated AI agents — all rendered in a live typewriter-style terminal UI.
+An AI-powered multi-agent debate simulator built with **LangGraph** and **Gemma 4 via OpenRouter**. Two AI agents argue opposing sides of any topic across multiple rounds, moderated and judged by dedicated AI agents — all rendered in a live typewriter-style terminal UI.
+
+---
+
+## 🚀 Why AI Debate Arena?
+
+Most AI apps give a **single answer**.
+
+AI Debate Arena creates a **battle of ideas** using multiple AI agents so users can explore arguments, challenge assumptions, and think critically before making decisions.
+
+Perfect for:
+
+* Students
+* Researchers
+* Founders
+* Writers
+* Curious thinkers
+* Anyone comparing viewpoints
 
 ---
 
 ## 📁 Project Structure
 
-```
+```bash
 debate-arena/
-├── main.py           # Entry point: user input, graph invocation, terminal display
-├── agents.py         # State definition, LLM setup, all agent functions
-├── connections.py    # Graph nodes, edges, routing logic, compiled graph
-└── prompts.py        # All prompt templates
+├── main.py
+├── agents.py
+├── connections.py
+└── prompts.py
 ```
 
 ---
 
 ## 🧠 How It Works
 
-The debate runs as a **LangGraph state machine** with 4 agents:
+The debate runs as a **LangGraph multi-agent state machine** with 4 agents:
 
-| Agent | Role |
-|---|---|
-| **Moderator** | Introduces the topic, sets rules, randomly picks who argues first |
-| **Pro** | Argues in favour of the topic each round |
-| **Con** | Rebuts and argues against the topic each round |
-| **Judge** | Evaluates the full debate and declares a winner |
-
-### Flow
-
-```
-START → Moderator → [Pro ↔ Con] × N rounds → Judge → END
-```
-
-- The moderator randomly picks the starting side (`pro` or `con`)
-- Pro and Con alternate until `max_rounds` is reached
-- The judge then reviews the full debate history and picks a winner
+| Agent     | Role                                                          |
+| --------- | ------------------------------------------------------------- |
+| Moderator | Introduces topic, explains rules, randomly selects who starts |
+| Pro       | Defends the topic                                             |
+| Con       | Challenges the topic                                          |
+| Judge     | Evaluates and declares a winner                               |
 
 ---
 
 ## ⚙️ Setup
 
-### 1. Clone the repository
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/Sripadh-Sujith/debate-arena.git
 cd debate-arena
 ```
 
-### 2. Install dependencies
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Set your Groq API key
+### 3. Add OpenRouter API Key
 
-In `agents.py`, replace the `api_key` value with your own key from [console.groq.com](https://console.groq.com):
+Create a `.env` file:
 
-```python
-llm = ChatGroq(
-    model='llama-3.1-8b-instant',
-    api_key='your_groq_api_key_here'
-)
+```env
+OPENROUTER_API_KEY=your_api_key_here
 ```
 
-> **Tip:** Use an environment variable instead for security:
-> ```python
-> import os
-> api_key=os.environ.get("GROQ_API_KEY")
-> ```
+### 4. Configure Gemma 4
+
+```python
+from langchain_openrouter import ChatOpenRouter
+import os
+
+llm = ChatOpenRouter(
+    model="google/gemma-4-27b-it",
+    api_key=os.getenv("OPENROUTER_API_KEY")
+)
+```
 
 ---
 
@@ -79,58 +89,14 @@ llm = ChatGroq(
 python main.py
 ```
 
-You will be prompted for:
-
-```
-Enter the topic: AI will replace software engineers
-Enter maximum rounds: 3
-```
-
-Each agent's response then streams to the terminal with a typewriter effect in colour-coded panels.
-
----
-
-## 📦 Dependencies
-
-| Package | Purpose |
-|---|---|
-| `langgraph` | State machine / agent orchestration |
-| `langchain-groq` | Groq LLM integration via LangChain |
-| `rich` | Terminal UI (panels, live typewriter rendering) |
-
----
-
-## 🗂️ Module Details
-
-### `prompts.py`
-Stores all 4 prompt templates as plain strings with `{placeholder}` variables for topic, history, and starter side.
-
-### `agents.py`
-- Defines the `State` TypedDict shared across all graph nodes
-- Initialises the `ChatGroq` LLM instance
-- Implements `moderator`, `pro_agent`, `con_agent`, and `judge` functions
-
-### `connections.py`
-- Defines routing functions `next_turn` and `should_continue`
-- Builds and compiles the `StateGraph` with all nodes and edges
-
-### `main.py`
-- Collects user input
-- Invokes the compiled graph
-- Renders each message from history using the `typewriter_panel` function
-
----
-
-## 🔮 Possible Improvements
-
-- Move the API key to a `.env` file using `python-dotenv`
-- Add support for saving debate transcripts to a file
-- Allow the user to choose the LLM model at runtime
-- Add a web UI using Flask or Streamlit
-- Support more than 2 debaters
-
 ---
 
 ## 📄 License
 
-MIT License. Free to use and modify.
+MIT License.
+
+---
+
+## 🙌 Author
+
+Built by **Sripadh Sujith**
