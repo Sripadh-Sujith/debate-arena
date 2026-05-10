@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 llm = ChatOpenRouter(
     model="google/gemma-4-26b-a4b-it",
-    api_key=os.getenv('API_KEY')
+    api_key=os.getenv('OPENROUTER_API_KEY')
 )
 
 class State(TypedDict):
